@@ -88,16 +88,18 @@ public class BluetoothSerial extends Plugin {
 
     @PluginMethod()
     public void isEnabled(PluginCall call) {
-
         JSObject ret = new JSObject();
 
-        if (bluetoothAdapter.isEnabled()) {
-            ret.put(KeyConstants.ENABLED, true);
-            call.resolve(ret);
-        } else {
+        if(hasNotBluetoothPermission()) {
+            Log.e(TAG, "App does not have permission to access bluetooth");
             ret.put(KeyConstants.ENABLED, false);
-            call.reject("Bluetooth is not enabled!");
+            call.reject("Error verifying if bluetooth is enabled!");
+            return;
         }
+
+        boolean enabled = bluetoothAdapter.isEnabled();
+        ret.put(KeyConstants.ENABLED, enabled);
+        call.resolve(ret);
     }
 
     @PluginMethod()
@@ -254,6 +256,16 @@ public class BluetoothSerial extends Plugin {
         super.handleOnActivityResult(requestCode, resultCode, data);
     }
 */
+
+    // TODO - validar se é necessário confirmar todas as permissões
+    private boolean hasNotBluetoothPermission() {
+        return !hasBluetoothPermission();
+    }
+
+    private boolean hasBluetoothPermission() {
+        return hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
     @Override
     protected void handleOnStart() {
         super.handleOnStart();
