@@ -171,11 +171,8 @@ public class BluetoothSerial extends Plugin {
             success = getService().disconnect(address);
         }
 
-        JSObject response = new JSObject();
-        response.put("disconnected", success);
-
         if(success) {
-            call.resolve(response);
+            call.resolve();
         } else {
             call.reject(ERROR_DISCONNECT_FAILED);
         }

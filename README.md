@@ -47,8 +47,6 @@ const { BluetoothSerial } = Plugins;
 
 Interface and type definitions can be found [here](./src/definitions.ts).
 
-# TODO - VALIDAR PROMISESs
-
 # API
 
 ## Methods
@@ -56,6 +54,8 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 - [BluetoothSerial.isEnabled](#isenabled)
 - [BluetoothSerial.scan](#scan)
 - [BluetoothSerial.connect](#connect)
+- [BluetoothSerial.disconnect](#disconnect)
+
 
 ## isEnabled
 
@@ -74,15 +74,15 @@ None.
 ### Quick Example
 
 ```typescript
-    BluetoothSerial
-      .isEnabled()
-      .then((response: BluetoothEnabledResult) => {
-        const message = response.enabled ? 'enabled' : 'disabled';
-        console.log(`Bluetooth is ${message}`);
-      })
-      .catch(() => {
-        console.log('Error checking bluetooth status');
-      });
+BluetoothSerial
+  .isEnabled()
+  .then((response: BluetoothEnabledResult) => {
+    const message = response.enabled ? 'enabled' : 'disabled';
+    console.log(`Bluetooth is ${message}`);
+  })
+  .catch(() => {
+    console.log('Error checking bluetooth status');
+  });
 ```
 
 ## scan
@@ -100,17 +100,17 @@ Function `scan` discovers Bluetooth devices close to the device and visible. The
 Example list passed to success callback.
 
 ```json
-    [{
-        "class": 0,
-        "id": "00:11:22:33:44:55",
-        "address": "00:11:22:33:44:55",
-        "name": "Device 1"
-    }, {
-        "class": 7936,
-        "id": "01:23:6645:4D67:89:00",
-        "address": "01:23:6645:4D67:89:00",
-        "name": "Device 2"
-    }]
+[{
+    "class": 0,
+    "id": "00:11:22:33:44:55",
+    "address": "00:11:22:33:44:55",
+    "name": "Device 1"
+}, {
+    "class": 7936,
+    "id": "01:23:6645:4D67:89:00",
+    "address": "01:23:6645:4D67:89:00",
+    "name": "Device 2"
+}]
 ```
 
 The discovery process takes a while to happen.
@@ -125,16 +125,16 @@ None.
 ### Quick Example
 
 ```typescript
-    BluetoothSerial
-      .scan()
-      .then((result: BluetoothScanResult) => {
-        result.devices.forEach((device: BluetoothDevice) {
-            console.log(device.id);
-        })
-      })
-      .catch(() => {
-        console.log('Error scanning devices');
-      });
+BluetoothSerial
+  .scan()
+  .then((result: BluetoothScanResult) => {
+    result.devices.forEach((device: BluetoothDevice) {
+        console.log(device.id);
+    });
+  })
+  .catch(() => {
+    console.log('Error scanning devices');
+  });
 ```
 
 ## connect
@@ -152,19 +152,53 @@ For Android, `connect` takes a MAC address of the remote device.
 
 ### Parameters
 
-- __macAddress__: Identifier of the remote device.
+- __address__: Identifier of the remote device.
 
 ### Quick Example
 
 ```typescript
-    BluetoothSerial
-      .scan()
-      .then((result: BluetoothScanResult) => {
-        result.devices.forEach((device: BluetoothDevice) {
-            console.log(device.id);
-        })
-      })
-      .catch(() => {
-        console.log('Error scanning devices');
-      });
+BluetoothSerial
+  .connect({
+    address: '00:11:22:33:44:55',
+  })
+  .then(() => {
+    console.log('Successfully connected')
+  })
+  .catch(() => {
+    console.log('Error connecting...');
+  });
+```
+
+## disconnect
+
+Disconnect a Bluetooth device.
+
+  `disconnect(options: BluetoothConnectOptions): Promise<void>`;
+
+### Description
+
+Function `disconnect` disconnects a Bluetooth device.  The callback Success will be called when the disconnection is successful.  Failure is called if the disconnection fails.
+
+#### Android
+For Android, `disconnect` takes a MAC address of the remote device.
+
+**Warning**: If no address is passed, all devices will be disconnected.
+
+### Parameters
+
+- __address__: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .disconnect({
+    address: '00:11:22:33:44:55',
+  })
+  .then(() => {
+    console.log('Successfully disconnected')
+  })
+  .catch(() => {
+    console.log('Error disconnecting...');
+  });
 ```
