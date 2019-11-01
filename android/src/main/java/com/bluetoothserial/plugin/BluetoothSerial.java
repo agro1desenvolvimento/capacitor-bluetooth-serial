@@ -88,30 +88,31 @@ public class BluetoothSerial extends Plugin {
 
     @PluginMethod()
     public void isEnabled(PluginCall call) {
-        JSObject ret = new JSObject();
-
         if(hasNotBluetoothPermission()) {
             Log.e(TAG, "App does not have permission to access bluetooth");
-            ret.put(KeyConstants.ENABLED, false);
             call.reject("Error verifying if bluetooth is enabled!");
             return;
         }
 
         boolean enabled = bluetoothAdapter.isEnabled();
+
+        JSObject ret = new JSObject();
         ret.put(KeyConstants.ENABLED, enabled);
         call.resolve(ret);
     }
 
     @PluginMethod()
     public void scan(PluginCall call) {
-        // TODO - se não tiver permissão, retornar exceção
+        // TODO - se não tiver permissão, solicitar permissão
         /*if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
-            discoverUnpairedDevices(callbackContext);
-        } else {
-            permissionCallback = callbackContext;
-            cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
+             cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
         }*/
+        if(hasNotBluetoothPermission()) {
+            Log.e(TAG, "App does not have permission to access bluetooth");
 
+            call.reject("Error searching devices!");
+            return;
+        }
 
         try {
             saveCall(call);
@@ -138,7 +139,6 @@ public class BluetoothSerial extends Plugin {
             return;
         }
 
-
         // TODO - Check already connected
 
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
@@ -147,7 +147,7 @@ public class BluetoothSerial extends Plugin {
             return;
         }
 
-        /*
+        /* TODO - autoConnect
         Boolean autoConnect = call.getBoolean(keyAutoConnect);
         autoConnect = autoConnect == null ? false : autoConnect;
          */

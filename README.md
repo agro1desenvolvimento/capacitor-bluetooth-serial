@@ -53,7 +53,8 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 
 ## Methods
 
-- [bluetoothSerial.isEnabled](#isenabled)
+- [BluetoothSerial.isEnabled](#isenabled)
+- [BluetoothSerial.scan](#scan)
 
 ## isEnabled
 
@@ -63,7 +64,7 @@ Reports if bluetooth is enabled.
 
 ### Description
 
-Function `isEnabled` calls the success whatever bluetooth is enabled or disabled. The promise will contain an attribute `enabled` indicating if bluetooth is enabled or *not* enabled. The failure callback will be called only if an error occurs (e.g. app does not have permission to access bluetooth).
+Function `isEnabled` calls the success whatever bluetooth is enabled or not. The promise will contain an attribute `enabled` indicating if bluetooth is enabled or *not* enabled. The failure callback will be called only if an error occurs (e.g. app does not have permission to access bluetooth).
 
 ### Parameters
 
@@ -71,13 +72,59 @@ None.
 
 ### Quick Example
 
-    bluetoothSerial
+    BluetoothSerial
       .isEnabled()
-      .then((response) => {
+      .then((response: BluetoothEnabledResult) => {
         const message = response.enabled ? 'enabled' : 'disabled';
         console.log(`Bluetooth is ${message}`);
       })
-      .catch((error) => {
+      .catch(() => {
         console.log('Error checking bluetooth status');
       });
-    );
+ 
+## scan
+
+Discover devices visible and close to the device
+
+  `scan(): Promise<BluetoothScanResult>;`
+
+### Description
+
+#### Android
+
+Function `scan` discovers Bluetooth devices close to the device and visible. The success callback is called with a list of objects similar to `list`, or an empty list if no devices are found.
+
+Example list passed to success callback.
+
+    [{
+        "class": 0,
+        "id": "00:11:22:33:44:55",
+        "address": "00:11:22:33:44:55",
+        "name": "Device 1"
+    }, {
+        "class": 7936,
+        "id": "01:23:6645:4D67:89:00",
+        "address": "01:23:6645:4D67:89:00",
+        "name": "Device 2"
+    }]
+
+The discovery process takes a while to happen.
+You may want to show a progress indicator while waiting for the discover proces to finish, and the sucess callback to be invoked.
+
+Calling `connect` on an unpaired Bluetooth device should begin the Android pairing process.
+
+### Parameters
+
+None.
+
+### Quick Example
+
+    BluetoothSerial.scan()
+      .then((result: BluetoothScanResult) => {
+        result.devices.forEach((device: BluetoothDevice) {
+            console.log(device.id);
+        })
+      })
+      .catch(() => {
+        console.log('Error scanning devices);
+      });
