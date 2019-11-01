@@ -152,7 +152,7 @@ For Android, `connect` takes a MAC address of the remote device.
 
 ### Parameters
 
-- __address__: Identifier of the remote device.
+- { __address__ }: Identifier of the remote device.
 
 ### Quick Example
 
@@ -186,7 +186,7 @@ For Android, `disconnect` takes a MAC address of the remote device.
 
 ### Parameters
 
-- __address__: Identifier of the remote device.
+- { __address__ }: Identifier of the remote device.
 
 ### Quick Example
 
@@ -200,5 +200,38 @@ BluetoothSerial
   })
   .catch(() => {
     console.log('Error disconnecting...');
+  });
+```
+
+## isConnected
+
+Reports the connection status.
+
+  `isConnected(options: BluetoothConnectOptions): Promise<BluetoothConnectResult>`;
+
+### Description
+
+Function `isConnected` calls the success callback with the connection status (connected or not connected). Failure will be called only if an error occurs.
+
+#### Android
+For Android, `isConnected` takes a MAC address of the remote device.
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .isConnected({
+    address: '00:11:22:33:44:55',
+  })
+  .then((result: BluetoothConnectResult) => {
+    const status = result.connected ? 'connected' : 'disconnected';
+    console.log(`Device is ${status}`);
+  })
+  .catch(() => {
+    console.log('Error checking connection status');
   });
 ```

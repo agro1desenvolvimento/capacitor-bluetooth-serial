@@ -8,6 +8,8 @@ export interface BluetoothSerialPlugin {
   isEnabled(): Promise<BluetoothEnabledResult>;
   scan(): Promise<BluetoothScanResult>;
   connect(options: BluetoothConnectOptions): Promise<void>;
+  disconnect(options: BluetoothConnectOptions): Promise<void>;
+  isConnected(options: BluetoothConnectOptions): Promise<BluetoothConnectResult>;
 }
 
 export interface BluetoothEnabledResult {
@@ -16,6 +18,10 @@ export interface BluetoothEnabledResult {
 
 export interface BluetoothScanResult {
   devices: BluetoothDevice[];
+}
+
+export interface BluetoothConnectResult {
+  connected: boolean;
 }
 
 export interface BluetoothDevice {

@@ -191,11 +191,7 @@ public class BluetoothSerial extends Plugin {
         JSObject response = new JSObject();
         response.put("connected", connected);
 
-        if(connected) {
-            call.resolve(response);
-        } else {
-            call.reject(ERROR_NOT_CONNECTED);
-        }
+        call.resolve(response);
     }
 
     @PluginMethod()
