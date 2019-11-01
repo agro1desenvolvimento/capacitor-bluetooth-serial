@@ -7,8 +7,7 @@ declare module "@capacitor/core" {
 export interface BluetoothSerialPlugin {
   isEnabled(): Promise<BluetoothEnabledResult>;
   scan(): Promise<BluetoothScanResult>;
-
-  echo(options: { value: string }): Promise<{value: string}>;
+  connect(options: BluetoothConnectOptions): Promise<void>;
 }
 
 export interface BluetoothEnabledResult {
@@ -26,4 +25,8 @@ export interface BluetoothDevice {
   class: number;
   uuid: string;
   rssi: number;
+}
+
+export interface BluetoothConnectOptions {
+  address: string;
 }

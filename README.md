@@ -55,6 +55,7 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 
 - [BluetoothSerial.isEnabled](#isenabled)
 - [BluetoothSerial.scan](#scan)
+- [BluetoothSerial.connect](#connect)
 
 ## isEnabled
 
@@ -72,6 +73,7 @@ None.
 
 ### Quick Example
 
+```typescript
     BluetoothSerial
       .isEnabled()
       .then((response: BluetoothEnabledResult) => {
@@ -81,7 +83,8 @@ None.
       .catch(() => {
         console.log('Error checking bluetooth status');
       });
- 
+```
+
 ## scan
 
 Discover devices visible and close to the device
@@ -96,6 +99,7 @@ Function `scan` discovers Bluetooth devices close to the device and visible. The
 
 Example list passed to success callback.
 
+```json
     [{
         "class": 0,
         "id": "00:11:22:33:44:55",
@@ -107,6 +111,7 @@ Example list passed to success callback.
         "address": "01:23:6645:4D67:89:00",
         "name": "Device 2"
     }]
+```
 
 The discovery process takes a while to happen.
 You may want to show a progress indicator while waiting for the discover proces to finish, and the sucess callback to be invoked.
@@ -119,12 +124,47 @@ None.
 
 ### Quick Example
 
-    BluetoothSerial.scan()
+```typescript
+    BluetoothSerial
+      .scan()
       .then((result: BluetoothScanResult) => {
         result.devices.forEach((device: BluetoothDevice) {
             console.log(device.id);
         })
       })
       .catch(() => {
-        console.log('Error scanning devices);
+        console.log('Error scanning devices');
       });
+```
+
+## connect
+
+Connect to a Bluetooth device.
+
+  `connect(options: BluetoothConnectOptions): Promise<void>`;
+
+### Description
+
+Function `connect` connects to a Bluetooth device.  The callback Success will be called when the connection is successful.  Failure is called if the connection fails.
+
+#### Android
+For Android, `connect` takes a MAC address of the remote device.
+
+### Parameters
+
+- __macAddress__: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+    BluetoothSerial
+      .scan()
+      .then((result: BluetoothScanResult) => {
+        result.devices.forEach((device: BluetoothDevice) {
+            console.log(device.id);
+        })
+      })
+      .catch(() => {
+        console.log('Error scanning devices');
+      });
+```

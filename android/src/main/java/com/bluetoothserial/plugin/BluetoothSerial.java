@@ -153,11 +153,9 @@ public class BluetoothSerial extends Plugin {
          */
 
         boolean success = getService().connect(device);
-        JSObject response = new JSObject();
-        response.put("connected", success);
 
         if(success) {
-            call.resolve(response);
+            call.resolve();
         } else {
             call.reject(ERROR_CONNECTION_FAILED);
         }
