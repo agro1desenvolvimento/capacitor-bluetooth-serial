@@ -232,7 +232,31 @@ public class BluetoothSerial extends Plugin {
 
             call.resolve(response);
         } catch (IOException e) {
-            Log.e(TAG, "Exception during write", e);
+            Log.e(TAG, "Exception during read", e);
+            call.reject("Não foi possível ler dados do dispositivo", e);
+        }
+    }
+
+    @PluginMethod()
+    public void readUntil(PluginCall call) {
+        String address = getAddress(call);
+
+        if (address == null) {
+            call.reject(ERROR_ADDRESS_MISSING);
+            return;
+        }
+
+        String delimiter = getDelimiter(call);
+
+        try {
+            String value = getService().readUntil(address, delimiter);
+
+            JSObject response = new JSObject();
+            response.put("value", value);
+
+            call.resolve(response);
+        } catch (IOException e) {
+            Log.e(TAG, "Exception during readUntil", e);
             call.reject("Não foi possível ler dados do dispositivo", e);
         }
     }
@@ -277,7 +301,15 @@ public class BluetoothSerial extends Plugin {
     }
 
     private String getAddress(PluginCall call) {
-        return call.getString(KeyConstants.ADDRESS_UUID);
+        return getString(call, KeyConstants.ADDRESS_UUID);
+    }
+
+    private String getDelimiter(PluginCall call) {
+        return getString(call, KeyConstants.DELIMITER);
+    }
+
+    private String getString(PluginCall call, String key) {
+        return call.getString(key);
     }
 
     private BluetoothManager getBluetoothManager() {

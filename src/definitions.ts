@@ -16,7 +16,9 @@ export interface BluetoothSerialPlugin {
 
   isConnected(options: BluetoothConnectOptions): Promise<BluetoothConnectResult>;
 
-  read(): Promise<BluetoothDataResult>;
+  read(options: BluetoothReadOptions): Promise<BluetoothDataResult>;
+
+  readUntil(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>;
 
 }
 
@@ -47,4 +49,13 @@ export interface BluetoothDevice {
 
 export interface BluetoothConnectOptions {
   address: string;
+}
+
+export interface BluetoothReadOptions {
+  address: string;
+}
+
+export interface BluetoothReadUntilOptions {
+  address: string;
+  delimiter: string;
 }

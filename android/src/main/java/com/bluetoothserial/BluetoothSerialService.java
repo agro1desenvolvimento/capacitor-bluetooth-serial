@@ -116,6 +116,7 @@ public class BluetoothSerialService {
     public String read(String address) throws IOException {
         BluetoothConnection connection = getConnection(address);
 
+        // TODO - criar thread customizada
         if(connection == null) {
             Log.e(TAG, "No connection found");
             throw new IOException("No connection found");
@@ -127,10 +128,24 @@ public class BluetoothSerialService {
             throw new IOException("Not connected");
         }
 
-        //byte[] rawdata = Arrays.copyOf(buffer, bytes);
-        //return rawdata;
-
         return connection.read();
+    }
+
+    public String readUntil(String address, String delimiter) throws IOException {
+        BluetoothConnection connection = getConnection(address);
+
+        if(connection == null) {
+            Log.e(TAG, "No connection found");
+            throw new IOException("No connection found");
+        }
+
+        if(!connection.isConnected()) {
+            Log.e(TAG, "Not connected");
+
+            throw new IOException("Not connected");
+        }
+
+        return connection.readUntil(delimiter);
     }
 
     private BluetoothConnection getConnection(String address) {
@@ -198,7 +213,7 @@ public class BluetoothSerialService {
         }
 
         public void run() {
-            Log.i(TAG, "BEGIN mConnectedThread");
+            Log.i(TAG, "BEGIN connectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
 
@@ -244,14 +259,30 @@ public class BluetoothSerialService {
         public synchronized String read() {
             String data;
             synchronized (buffer) {
-                int length = buffer.length();
-                data = buffer.substring(0, length);
-                buffer.delete(0, length);
+                int index = buffer.length();
 
+                data = buffer.substring(0, index);
+                buffer.delete(0, index);
             }
 
             return data;
         }
+
+        public synchronized String readUntil(String delimiter) {
+            String data = "";
+            synchronized (buffer) {
+                int index = buffer.indexOf(delimiter);
+
+                if (index >= 0) {
+                    index += delimiter.length();
+                    data = buffer.substring(0, index);
+                    buffer.delete(0, index+1);
+                }
+            }
+
+            return data;
+        }
+
 
         /**
          * Write to the connected OutStream.

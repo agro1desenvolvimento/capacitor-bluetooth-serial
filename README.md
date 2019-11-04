@@ -240,7 +240,7 @@ BluetoothSerial
 
 Reads data from the buffer.
 
-  `read(): Promise<BluetoothDataResult>`;
+  `read(options: BluetoothReadOptions): Promise<BluetoothDataResult>`;
 
 ### Description
 
@@ -256,6 +256,37 @@ Function `read` reads the data from the buffer. The data is passed to the succes
 BluetoothSerial
   .read({
     address: '00:11:22:33:44:55',
+  })
+  .then((result: BluetoothDataResult) => {
+    console.log(result.data);
+  })
+  .catch(() => {
+    console.log('Error reading data from device');
+  });
+```
+
+## readUntil
+
+Reads data from the buffer until it reaches a delimiter.
+
+  `read(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>`;
+
+### Description
+
+Function `readUntil` reads the data from the buffer until it reaches a delimiter.  The data is passed to the success callback as a String.  If the buffer does not contain the delimiter, an empty String is passed to the callback.
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+- { __delimiter__ }: Delimiter.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .readUntil({
+    address: '00:11:22:33:44:55',
+    delimiter: '\n',
   })
   .then((result: BluetoothDataResult) => {
     console.log(result.data);
