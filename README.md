@@ -235,3 +235,32 @@ BluetoothSerial
     console.log('Error checking connection status');
   });
 ```
+
+## read
+
+Reads data from the buffer.
+
+  `read(): Promise<BluetoothDataResult>`;
+
+### Description
+
+Function `read` reads the data from the buffer. The data is passed to the success callback as a String.  Calling `read` when no data is available will pass an empty String to the callback.
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .read({
+    address: '00:11:22:33:44:55',
+  })
+  .then((result: BluetoothDataResult) => {
+    console.log(result.data);
+  })
+  .catch(() => {
+    console.log('Error reading data from device');
+  });
+```

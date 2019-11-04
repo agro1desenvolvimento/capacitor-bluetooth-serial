@@ -5,11 +5,19 @@ declare module "@capacitor/core" {
 }
 
 export interface BluetoothSerialPlugin {
+
   isEnabled(): Promise<BluetoothEnabledResult>;
+
   scan(): Promise<BluetoothScanResult>;
+
   connect(options: BluetoothConnectOptions): Promise<void>;
+
   disconnect(options: BluetoothConnectOptions): Promise<void>;
+
   isConnected(options: BluetoothConnectOptions): Promise<BluetoothConnectResult>;
+
+  read(): Promise<BluetoothDataResult>;
+
 }
 
 export interface BluetoothEnabledResult {
@@ -22,6 +30,10 @@ export interface BluetoothScanResult {
 
 export interface BluetoothConnectResult {
   connected: boolean;
+}
+
+export interface BluetoothDataResult {
+  data: string;
 }
 
 export interface BluetoothDevice {

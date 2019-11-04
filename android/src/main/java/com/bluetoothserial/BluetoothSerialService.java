@@ -96,55 +96,41 @@ public class BluetoothSerialService {
      * @param out  The bytes to write
      */
     public boolean write(String address, byte[] out) {
-       // try {
-           // Log.d(TAG, out.toString());
-
-        /*    BluetoothSocket socket = getSocket(address);
-
-            if(socket == null) {
-                Log.e(TAG, "No connection found");
-                return false;
-            }
-
-            Log.d(TAG, "" + socket.isConnected());
-*/
 
         BluetoothConnection r;
-            // Synchronize a copy of the ConnectedThread
-            synchronized (this) {
-                r = getConnection(address);
-            }
-            // Perform the write unsynchronized
-            r.write(out);
-            //socket.getOutputStream().write(buffer);
-      //  } catch (IOException e) {
-      //      Log.e(TAG, "Exception during write", e);
-       //     return false;
-        //}
+        // Synchronize a copy of the ConnectedThread
+        synchronized (this) {
+            r = getConnection(address);
+        }
+
+        if(r == null || !r.isConnected()) {
+            return false;
+        }
+
+        // Perform the write unsynchronized
+        r.write(out);
 
         return true;
     }
 
-    public byte[] read(String address) throws IOException {
-        BluetoothConnection socket = getConnection(address);
+    public String read(String address) throws IOException {
+        BluetoothConnection connection = getConnection(address);
 
-        if(socket == null) {
+        if(connection == null) {
             Log.e(TAG, "No connection found");
-            return new byte[0];
+            throw new IOException("No connection found");
         }
 
-        if(!socket.isConnected()) {
-            // TODO - throw exception
+        if(!connection.isConnected()) {
+            Log.e(TAG, "Not connected");
+
+            throw new IOException("Not connected");
         }
 
-        byte[] buffer = new byte[1024];
-
-        //int bytes = socket.getInputStream().read(buffer);
         //byte[] rawdata = Arrays.copyOf(buffer, bytes);
-
         //return rawdata;
 
-        return new byte[0];
+        return connection.read();
     }
 
     private BluetoothConnection getConnection(String address) {
@@ -155,6 +141,7 @@ public class BluetoothSerialService {
         private BluetoothSocket socket = null;
         private final InputStream inStream;
         private final OutputStream outStream;
+        private StringBuffer buffer;
 
         public BluetoothConnection(BluetoothDevice device, boolean secure) {
             adapter.cancelDiscovery();
@@ -163,6 +150,7 @@ public class BluetoothSerialService {
 
             inStream = getInputStream(socket);
             outStream = getOutputStream(socket);
+            buffer = new StringBuffer();
         }
 
         private void createRfcomm(BluetoothDevice device, boolean secure) {
@@ -216,12 +204,16 @@ public class BluetoothSerialService {
 
             // Keep listening to the InputStream while connected
             while (true) {
-/*
+
                 try {
                     // Read from the InputStream
                     bytes = inStream.read(buffer);
                     String data = new String(buffer, 0, bytes);
                     System.out.println(data);
+
+                    this.buffer.append(data);
+
+
 
 
                     // Send the new data String to the UI Activity
@@ -237,17 +229,28 @@ public class BluetoothSerialService {
 
 
                     */
-               /* } catch (IOException e) {
+                } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
      //               connectionLost();
                     // Start the service over to restart listening mode
       //              BluetoothSerialService.this.start();
-                    System.out.println(BluetoothSerialService.this);
+                    //System.out.println(BluetoothSerialService.this);
                     break;
                 }
-*/
 
             }
+        }
+
+        public synchronized String read() {
+            String data;
+            synchronized (buffer) {
+                int length = buffer.length();
+                data = buffer.substring(0, length);
+                buffer.delete(0, length);
+
+            }
+
+            return data;
         }
 
         /**

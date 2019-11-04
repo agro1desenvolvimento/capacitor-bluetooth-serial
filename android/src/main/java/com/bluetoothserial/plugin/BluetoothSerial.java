@@ -207,11 +207,9 @@ public class BluetoothSerial extends Plugin {
         Log.i(TAG, value);
 
         boolean success = getService().write(address, BluetoothDeviceHelper.toByteArray(value));
-        JSObject response = new JSObject();
-        response.put("success", success);
 
         if(success) {
-            call.resolve(response);
+            call.resolve();
         } else {
             call.reject(ERROR_WRITING);
         }
@@ -227,7 +225,7 @@ public class BluetoothSerial extends Plugin {
         }
 
         try {
-            byte[] value = getService().read(address);
+            String value = getService().read(address);
 
             JSObject response = new JSObject();
             response.put("value", value);
@@ -238,8 +236,6 @@ public class BluetoothSerial extends Plugin {
             call.reject("Não foi possível ler dados do dispositivo", e);
         }
     }
-
-
 
     /*
     @Override
