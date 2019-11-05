@@ -20,6 +20,10 @@ export interface BluetoothSerialPlugin {
 
   readUntil(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>;
 
+  enableNotifications(options: BluetoothEnableNotificationsOptions): Promise<BluetoothEnableNotificationsResult>;
+
+  disableNotifications(options: BluetoothDisableNotificationsOptions): Promise<void>;
+
 }
 
 export interface BluetoothEnabledResult {
@@ -36,6 +40,10 @@ export interface BluetoothConnectResult {
 
 export interface BluetoothDataResult {
   data: string;
+}
+
+export interface BluetoothEnableNotificationsResult {
+  eventName: string;
 }
 
 export interface BluetoothDevice {
@@ -58,4 +66,13 @@ export interface BluetoothReadOptions {
 export interface BluetoothReadUntilOptions {
   address: string;
   delimiter: string;
+}
+
+export interface BluetoothEnableNotificationsOptions {
+  address: string;
+  delimiter: string;
+}
+
+export interface BluetoothDisableNotificationsOptions {
+  address: string;
 }

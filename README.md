@@ -51,11 +51,18 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 
 ## Methods
 
-- [BluetoothSerial.isEnabled](#isenabled)
+- [BluetoothSerial.isEnabled](#isEnabled)
 - [BluetoothSerial.scan](#scan)
 - [BluetoothSerial.connect](#connect)
 - [BluetoothSerial.disconnect](#disconnect)
-
+- [BluetoothSerial.isConnected](#isConnected)
+- [BluetoothSerial.read](#read)
+- [BluetoothSerial.readUntil](#readUntil)
+- [BluetoothSerial.enableNotifications](#enableNotifications)
+- [BluetoothSerial.disableNotifications](#disableNotifications)
+- [BluetoothSerial.enableRawNotifications](#enableRawNotifications)
+- [BluetoothSerial.disableRawNotifications](#disableRawNotifications)
+- [BluetoothSerial.enable](#enable)
 
 ## isEnabled
 
@@ -295,3 +302,90 @@ BluetoothSerial
     console.log('Error reading data from device');
   });
 ```
+
+## enableNotifications
+
+Enable and be notified when any data is received.
+
+  `enableNotifications(options: BluetoothEnableNotificationsOptions): Promise<BluetoothEnableNotificationsResult>`;
+
+### Description
+
+Function `enableNotifications` enable notifications. The success callback will return an event name. In order to retrieve the values, one has to use an Event Listener with the returned event name.
+
+``` typescript
+const listener = BluetoothSerial.addListener( eventName , (data: BluetoothDataResult) => {
+
+    const { value } = data.data;
+    //Do something with the data
+q
+});
+```
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+- { __delimiter__ }: Delimiter for notification.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .enableNotifications({
+    address: '00:11:22:33:44:55',
+    delimiter: '\n',
+  })
+  .then((result: BluetoothEnableNotificationsResult) => {
+    event = BluetoothSerial.addListener(result.eventName, (data: BluetoothDataResult) => {
+        console.log(data.data);
+      });
+  })
+  .catch(() => {
+    console.log('Error enabling listener for device');
+  });
+```
+
+## disableNotifications
+
+Stops the propagation of value changes.
+
+  `disableNotifications(options: BluetoothDisableNotificationsOptions): Promise<void>`;
+
+### Description
+
+Function `disableNotifications` disable notifications. Additionally, the event listener has to be removed.
+
+```typescript
+listener.remove();
+```
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .disableNotifications({
+    address: '00:11:22:33:44:55',
+  })
+  .then(() => {
+    event.remove();
+  })
+  .catch(() => {
+    console.log('Error disabling listener for device');
+  });
+```
+
+## enableRawNotifications
+
+  Under development.
+
+## disableRawNotifications
+
+  Under development.
+
+## enable
+
+  Under development.

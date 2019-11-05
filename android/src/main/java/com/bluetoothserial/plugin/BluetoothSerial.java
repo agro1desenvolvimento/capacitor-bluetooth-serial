@@ -38,7 +38,6 @@ public class BluetoothSerial extends Plugin {
     private static final String ERROR_DEVICE_NOT_FOUND = "Dispositivo não encontrado.";
     private static final String ERROR_CONNECTION_FAILED = "Falha ao conectar ao dispositivo.";
     private static final String ERROR_DISCONNECT_FAILED = "Falha ao desconectar do dispositivo.";
-    private static final String ERROR_NOT_CONNECTED = "Dispositivo não está conectado.";
     private static final String ERROR_WRITING= "Falha ao enviar dados ao dispositivo.";
     private static final String TAG = "BluetoothSerial";
 
@@ -261,12 +260,52 @@ public class BluetoothSerial extends Plugin {
         }
     }
 
-    /*
-    @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        super.handleOnActivityResult(requestCode, resultCode, data);
+    @PluginMethod()
+    public void enableNotifications(PluginCall call) {
+        String address = getAddress(call);
+
+        if (address == null) {
+            call.reject(ERROR_ADDRESS_MISSING);
+            return;
+        }
+
+        String delimiter = getDelimiter(call);
+
+        try {
+            String eventName = getService().enableNotifications(address, delimiter);
+
+            JSObject response = new JSObject();
+            response.put("eventName", eventName);
+
+            call.resolve(response);
+        } catch (IOException e) {
+            Log.e(TAG, "Exception during enableNotifications", e);
+            call.reject("Não foi possível habilitar as notificações", e);
+        }
     }
-*/
+
+    @PluginMethod()
+    public void disableNotifications(PluginCall call) {
+        String address = getAddress(call);
+
+        if (address == null) {
+            call.reject(ERROR_ADDRESS_MISSING);
+            return;
+        }
+
+        try {
+            getService().disableNotifications(address);
+
+            call.resolve();
+        } catch (IOException e) {
+            Log.e(TAG, "Exception during disableNotifications", e);
+            call.reject("Não foi possível desabilitar as notificações", e);
+        }
+    }
+
+    public void notifyClient(String eventName, JSObject response) {
+        notifyListeners(eventName, response);
+    }
 
     // TODO - validar se é necessário confirmar todas as permissões
     private boolean hasNotBluetoothPermission() {
@@ -296,7 +335,7 @@ public class BluetoothSerial extends Plugin {
 
     private void initializeService() {
         if(service == null) {
-            service = new BluetoothSerialService(bluetoothAdapter);
+            service = new BluetoothSerialService(this, bluetoothAdapter);
         }
     }
 

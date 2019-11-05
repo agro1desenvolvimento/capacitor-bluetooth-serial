@@ -5,6 +5,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.bluetoothserial.plugin.BluetoothSerial;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,11 +19,14 @@ import java.util.UUID;
 public class BluetoothSerialService {
     private static final UUID DEFAULT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String TAG = "BluetoothSerialService";
+    private static final String SUBSCRIBE_EVENT = "subscribe";
 
     private BluetoothAdapter adapter;
+    private BluetoothSerial plugin;
     private Map<String, BluetoothConnection> connections = new HashMap<>();
 
-    public BluetoothSerialService(BluetoothAdapter adapter) {
+    public BluetoothSerialService(BluetoothSerial plugin, BluetoothAdapter adapter) {
+        this.plugin = plugin;
         this.adapter = adapter;
     }
 
@@ -27,6 +34,7 @@ public class BluetoothSerialService {
         return connect(device, true);
     }
 
+    // TODO
     public boolean connectInsecure(BluetoothDevice device) {
         return connect(device, false);
     }
@@ -116,7 +124,7 @@ public class BluetoothSerialService {
     public String read(String address) throws IOException {
         BluetoothConnection connection = getConnection(address);
 
-        // TODO - criar thread customizada
+        // TODO - criar exception customizada
         if(connection == null) {
             Log.e(TAG, "No connection found");
             throw new IOException("No connection found");
@@ -148,6 +156,40 @@ public class BluetoothSerialService {
         return connection.readUntil(delimiter);
     }
 
+    public String enableNotifications(String address, String delimiter) throws IOException {
+        BluetoothConnection connection = getConnection(address);
+
+        if(connection == null) {
+            Log.e(TAG, "No connection found");
+            throw new IOException("No connection found");
+        }
+
+        if(!connection.isConnected()) {
+            Log.e(TAG, "Not connected");
+
+            throw new IOException("Not connected");
+        }
+
+        return connection.enableNotifications(delimiter);
+    }
+
+    public void disableNotifications(String address) throws IOException {
+        BluetoothConnection connection = getConnection(address);
+
+        if(connection == null) {
+            Log.e(TAG, "No connection found");
+            throw new IOException("No connection found");
+        }
+
+        if(!connection.isConnected()) {
+            Log.e(TAG, "Not connected");
+
+            throw new IOException("Not connected");
+        }
+
+        connection.disableNotifications();
+    }
+
     private BluetoothConnection getConnection(String address) {
         return connections.get(address);
     }
@@ -157,6 +199,9 @@ public class BluetoothSerialService {
         private final InputStream inStream;
         private final OutputStream outStream;
         private StringBuffer buffer;
+        private boolean enabledNotifications;
+        private boolean enabledRawNotifications;
+        private String subscribeDelimiter;
 
         public BluetoothConnection(BluetoothDevice device, boolean secure) {
             adapter.cancelDiscovery();
@@ -166,6 +211,8 @@ public class BluetoothSerialService {
             inStream = getInputStream(socket);
             outStream = getOutputStream(socket);
             buffer = new StringBuffer();
+            this.enabledNotifications = false;
+            this.enabledRawNotifications = false;
         }
 
         private void createRfcomm(BluetoothDevice device, boolean secure) {
@@ -224,28 +271,16 @@ public class BluetoothSerialService {
                     // Read from the InputStream
                     bytes = inStream.read(buffer);
                     String data = new String(buffer, 0, bytes);
-                    System.out.println(data);
 
                     this.buffer.append(data);
 
-
-
-
-                    // Send the new data String to the UI Activity
- //                   mHandler.obtainMessage(BluetoothSerial.MESSAGE_READ, data).sendToTarget();
-
-                    // Send the raw bytestream to the UI Activity.
-                    // We make a copy because the full array can have extra data at the end
-                    // when / if we read less than its size.
-                   /* if (bytes > 0) {
-                        byte[] rawdata = Arrays.copyOf(buffer, bytes);
-    //                    mHandler.obtainMessage(BluetoothSerial.MESSAGE_READ_RAW, rawdata).sendToTarget();
+                    if (areNotificationsEnabled()) {
+                        notifySubscribers(buffer);
                     }
-
-
-                    */
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
+
+                    // TODO - se perder conexao, tentar reconectar
      //               connectionLost();
                     // Start the service over to restart listening mode
       //              BluetoothSerialService.this.start();
@@ -253,6 +288,26 @@ public class BluetoothSerialService {
                     break;
                 }
 
+            }
+        }
+
+        public boolean areNotificationsEnabled() {
+            return this.enabledNotifications || this.enabledRawNotifications;
+        }
+
+        public void notifySubscribers(byte[] bytes) {
+            if (this.enabledNotifications) {
+                while (buffer.indexOf(this.subscribeDelimiter) >= 0) {
+                    String data = readUntil(this.subscribeDelimiter);
+                    JSObject ret = new JSObject();
+                    ret.put("data", data);
+
+                    plugin.notifyClient(SUBSCRIBE_EVENT, ret);
+                }
+            }
+            if (this.enabledRawNotifications) {
+                // TODO - implementar
+                // enviar bytes
             }
         }
 
@@ -281,6 +336,17 @@ public class BluetoothSerialService {
             }
 
             return data;
+        }
+
+        public synchronized String enableNotifications(String delimiter) {
+            enabledNotifications = true;
+            this.subscribeDelimiter = delimiter;
+
+            return SUBSCRIBE_EVENT;
+        }
+
+        public synchronized void disableNotifications() {
+            enabledNotifications = false;
         }
 
 
