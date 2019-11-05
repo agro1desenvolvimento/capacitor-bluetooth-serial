@@ -19,7 +19,7 @@ In your capacitor project, make sure to register the Android plugin in
 in the projects `MainActivity` as follows
 
 ```java
-import com.bluetoothserial.plugin.BluetoothLEClient;
+import com.bluetoothserial.plugin.BluetoothSerial;
 
 public class MainActivity extends BridgeActivity {
   @Override
