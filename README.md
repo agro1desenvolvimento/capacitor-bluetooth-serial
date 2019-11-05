@@ -4,6 +4,7 @@ A client implementation for interacting with Bluetooth
 
 Supported platforms
 
+- [ ] Web
 - [x] Android
 - [ ] iOS
 
