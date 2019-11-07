@@ -25,6 +25,13 @@ export class BluetoothSerialWeb extends WebPlugin implements BluetoothSerialPlug
     throw new Error("Method not implemented.");
   }
 
+  async connectInsecure(options: import("./definitions").BluetoothConnectOptions): Promise<void> {
+    if(!options){
+      return Promise.reject(new OptionsRequiredError());
+    }
+    throw new Error("Method not implemented.");
+  }
+
   async disconnect(options: import("./definitions").BluetoothConnectOptions): Promise<void> {
     if(!options){
       return Promise.reject(new OptionsRequiredError());

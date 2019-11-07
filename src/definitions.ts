@@ -12,6 +12,8 @@ export interface BluetoothSerialPlugin {
 
   connect(options: BluetoothConnectOptions): Promise<void>;
 
+  connectInsecure(options: BluetoothConnectOptions): Promise<void>;
+
   disconnect(options: BluetoothConnectOptions): Promise<void>;
 
   isConnected(options: BluetoothConnectOptions): Promise<BluetoothConnectResult>;

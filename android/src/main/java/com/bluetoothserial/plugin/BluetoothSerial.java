@@ -26,15 +26,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NativePlugin(
-        permissions = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN
-        }
+    permissions = {
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_ADMIN
+    }
 )
 public class BluetoothSerial extends Plugin {
-
     private static final String ERROR_ADDRESS_MISSING = "Propriedade endereço do dispositivo é obrigatória.";
     private static final String ERROR_DEVICE_NOT_FOUND = "Dispositivo não encontrado.";
     private static final String ERROR_CONNECTION_FAILED = "Falha ao conectar ao dispositivo.";
@@ -103,10 +102,10 @@ public class BluetoothSerial extends Plugin {
 
     @PluginMethod()
     public void scan(PluginCall call) {
-        // TODO - se não tiver permissão, solicitar permissão
-        /*if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
-             cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
-        }*/
+      // TODO - se não tiver permissão, solicitar permissão
+          /*if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
+               cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
+          }*/
         if(hasNotBluetoothPermission()) {
             Log.e(TAG, "App does not have permission to access bluetooth");
 
@@ -128,11 +127,11 @@ public class BluetoothSerial extends Plugin {
             final BluetoothSerial serial = this;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    serial.stopScan();
-                }
-            }, 5000);
+            @Override
+            public void run() {
+              serial.stopScan();
+            }
+          }, 5000);
         } catch (Exception e) {
             saveCall(null);
             call.reject("Não foi possível buscar os dispositivos", e);
@@ -145,6 +144,15 @@ public class BluetoothSerial extends Plugin {
 
     @PluginMethod()
     public void connect(PluginCall call) {
+        connect(call, true);
+    }
+
+    @PluginMethod()
+    public void connectInsecure(PluginCall call) {
+        connect(call, false);
+    }
+
+    private void connect(PluginCall call, boolean secure) {
         String address = getAddress(call);
 
         if (address == null) {
@@ -166,14 +174,14 @@ public class BluetoothSerial extends Plugin {
          */
 
         saveCall(call);
-        getService().connect(device, this);
+        getService().connect(device, secure, this);
     }
 
     public void connected() {
         PluginCall call = getSavedCall();
         if(call != null) {
-           call.resolve();
-           freeSavedCall();
+            call.resolve();
+            freeSavedCall();
         }
     }
 

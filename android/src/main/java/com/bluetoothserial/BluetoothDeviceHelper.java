@@ -1,7 +1,6 @@
 package com.bluetoothserial;
 
 import android.bluetooth.BluetoothDevice;
-import android.util.Base64;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -11,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 public class BluetoothDeviceHelper implements Serializable {
-
     public static JSArray devicesToJSArray(Set<BluetoothDevice> devices) {
         JSArray devicesAsJson = new JSArray();
 
