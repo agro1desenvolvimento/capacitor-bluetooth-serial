@@ -55,6 +55,7 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 - [BluetoothSerial.isEnabled](#isEnabled)
 - [BluetoothSerial.scan](#scan)
 - [BluetoothSerial.connect](#connect)
+- [BluetoothSerial.connectInsecure](#connectInsecure)
 - [BluetoothSerial.disconnect](#disconnect)
 - [BluetoothSerial.isConnected](#isConnected)
 - [BluetoothSerial.read](#read)
@@ -167,6 +168,39 @@ For Android, `connect` takes a MAC address of the remote device.
 ```typescript
 BluetoothSerial
   .connect({
+    address: '00:11:22:33:44:55',
+  })
+  .then(() => {
+    console.log('Successfully connected')
+  })
+  .catch(() => {
+    console.log('Error connecting...');
+  });
+```
+
+## connectInsecure
+
+Connect insecurely to a Bluetooth device.
+
+  `connectInsecure(options: BluetoothConnectOptions): Promise<void>`;
+
+### Description
+
+Function `connectInsecure` connects to a Bluetooth device.  The callback Success will be called when the connection is successful.  Failure is called if the connection fails.
+Function `connectInsecure` works like [BluetoothSerial.connect](#connect), but creates an insecure connection to a Bluetooth device. See the [Android docs](https://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#createInsecureRfcommSocketToServiceRecord(java.util.UUID)) for more information.
+
+#### Android
+For Android, `connectInsecure` takes a MAC address of the remote device.
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .connectInsecure({
     address: '00:11:22:33:44:55',
   })
   .then(() => {
