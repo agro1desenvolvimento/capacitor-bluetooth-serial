@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.util.Log;
 
 import com.bluetoothserial.BluetoothDeviceHelper;
@@ -123,10 +124,23 @@ public class BluetoothSerial extends Plugin {
             registerReceiver(receiver, filterFinished);
 
             bluetoothAdapter.startDiscovery();
+
+            final BluetoothSerial serial = this;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    serial.stopScan();
+                }
+            }, 5000);
         } catch (Exception e) {
             saveCall(null);
             call.reject("Não foi possível buscar os dispositivos", e);
         }
+    }
+
+    private void stopScan() {
+        bluetoothAdapter.cancelDiscovery();
     }
 
     @PluginMethod()
@@ -151,12 +165,23 @@ public class BluetoothSerial extends Plugin {
         autoConnect = autoConnect == null ? false : autoConnect;
          */
 
-        boolean success = getService().connect(device);
+        saveCall(call);
+        getService().connect(device, this);
+    }
 
-        if(success) {
-            call.resolve();
-        } else {
+    public void connected() {
+        PluginCall call = getSavedCall();
+        if(call != null) {
+           call.resolve();
+           freeSavedCall();
+        }
+    }
+
+    public void connectionFailed() {
+        PluginCall call = getSavedCall();
+        if(call != null) {
             call.reject(ERROR_CONNECTION_FAILED);
+            freeSavedCall();
         }
     }
 
@@ -327,6 +352,9 @@ public class BluetoothSerial extends Plugin {
     protected void handleOnStop() {
         super.handleOnStop();
         unregisterReceiver(receiver);
+        if(service != null) {
+            getService().stopAll();
+        }
     }
 
     private void initializeBluetoothAdapter() {
