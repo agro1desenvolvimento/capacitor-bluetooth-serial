@@ -53,6 +53,7 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 ## Methods
 
 - [BluetoothSerial.isEnabled](#isEnabled)
+- [BluetoothSerial.enable](#enable)
 - [BluetoothSerial.scan](#scan)
 - [BluetoothSerial.connect](#connect)
 - [BluetoothSerial.connectInsecure](#connectInsecure)
@@ -64,7 +65,6 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 - [BluetoothSerial.disableNotifications](#disableNotifications)
 - [BluetoothSerial.enableRawNotifications](#enableRawNotifications)
 - [BluetoothSerial.disableRawNotifications](#disableRawNotifications)
-- [BluetoothSerial.enable](#enable)
 
 ## isEnabled
 
@@ -74,7 +74,9 @@ Reports if bluetooth is enabled.
 
 ### Description
 
-Function `isEnabled` calls the success whatever bluetooth is enabled or not. The promise will contain an attribute `enabled` indicating if bluetooth is enabled or *not* enabled. The failure callback will be called only if an error occurs (e.g. app does not have permission to access bluetooth).
+Function `isEnabled` calls the success whatever bluetooth is enabled or not. The promise will contain an attribute `enabled` indicating if bluetooth is enabled or *not* enabled. The failure callback will be called only if an error occurs.
+
+If you want to enable bluetooth afterwards, you can use #enable directly, once #enable also check if the bluetooth is conected or not.
 
 ### Parameters
 
@@ -91,6 +93,36 @@ BluetoothSerial
   })
   .catch(() => {
     console.log('Error checking bluetooth status');
+  });
+```
+
+## enable
+
+  Enable bluetooth if it is not enabled. Also request permissions for bluetooth access if it is necessary.
+
+  `enable(): Promise<BluetoothEnabledResult>;`
+
+### Description
+
+Function `enable` calls the success whatever bluetooth is successfully enabled or not. The promise will contain an attribute `enabled` indicating if bluetooth is enabled or *not* enabled after the process. The failure callback will be called only if an error occurs.
+
+If the app does not have permission to use bluetooth, it will request it.
+
+### Parameters
+
+None.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .enable()
+  .then((response: BluetoothEnabledResult) => {
+    const message = response.enabled ? 'enabled' : 'disabled';
+    console.log(`Bluetooth is ${message}`);
+  })
+  .catch(() => {
+    console.log('Error enabling bluetooth');
   });
 ```
 
@@ -418,9 +450,5 @@ BluetoothSerial
   Under development.
 
 ## disableRawNotifications
-
-  Under development.
-
-## enable
 
   Under development.

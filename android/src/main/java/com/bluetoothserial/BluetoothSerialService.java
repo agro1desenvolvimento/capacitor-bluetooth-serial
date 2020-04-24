@@ -36,11 +36,12 @@ public class BluetoothSerialService {
         connect(device, true, serial);
     }
 
+    // TODO
     public void connectInsecure(BluetoothDevice device, BluetoothSerial serial) {
         connect(device, false, serial);
     }
 
-    public void connect(BluetoothDevice device, boolean secure, BluetoothSerial serial) {
+    private void connect(BluetoothDevice device, boolean secure, BluetoothSerial serial) {
         BluetoothConnection connectionThread = new BluetoothConnection(device, secure, serial);
         connectionThread.start();
 

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 public class BluetoothDeviceHelper implements Serializable {
+
     public static JSArray devicesToJSArray(Set<BluetoothDevice> devices) {
         JSArray devicesAsJson = new JSArray();
 
@@ -37,7 +38,6 @@ public class BluetoothDeviceHelper implements Serializable {
         }
 
         return value.getBytes(StandardCharsets.UTF_8);
-        //return Base64.decode(encoded, Base64.DEFAULT);
     }
 
 }
