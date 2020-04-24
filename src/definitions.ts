@@ -8,6 +8,8 @@ export interface BluetoothSerialPlugin {
 
   isEnabled(): Promise<BluetoothEnabledResult>;
 
+  enable(): Promise<BluetoothEnabledResult>;
+
   scan(): Promise<BluetoothScanResult>;
 
   connect(options: BluetoothConnectOptions): Promise<void>;
