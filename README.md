@@ -343,7 +343,7 @@ BluetoothSerial
 
 Reads data from the buffer until it reaches a delimiter.
 
-  `read(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>`;
+  `readUntil(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>`;
 
 ### Description
 
