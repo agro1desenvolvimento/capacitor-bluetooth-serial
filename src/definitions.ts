@@ -24,6 +24,8 @@ export interface BluetoothSerialPlugin {
 
   readUntil(options: BluetoothReadUntilOptions): Promise<BluetoothDataResult>;
 
+  write(options: BluetoothWriteOptions): Promise<void>;
+
   enableNotifications(options: BluetoothEnableNotificationsOptions): Promise<BluetoothEnableNotificationsResult>;
 
   disableNotifications(options: BluetoothDisableNotificationsOptions): Promise<void>;
@@ -70,6 +72,11 @@ export interface BluetoothReadOptions {
 export interface BluetoothReadUntilOptions {
   address: string;
   delimiter: string;
+}
+
+export interface BluetoothWriteOptions {
+    address: string;
+    value: string;
 }
 
 export interface BluetoothEnableNotificationsOptions {
