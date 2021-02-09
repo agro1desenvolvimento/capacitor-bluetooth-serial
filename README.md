@@ -65,6 +65,7 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 - [BluetoothSerial.disableNotifications](#disableNotifications)
 - [BluetoothSerial.enableRawNotifications](#enableRawNotifications)
 - [BluetoothSerial.disableRawNotifications](#disableRawNotifications)
+- [BluetoothSerial.write](#write)
 
 ## isEnabled
 
@@ -452,3 +453,34 @@ BluetoothSerial
 ## disableRawNotifications
 
   Under development.
+
+## write
+
+Write data to the buffer.
+
+  `write(options: BluetoothWriteOptions): Promise<void>`;
+
+### Description
+
+Function `write` writes data to the buffer.
+
+### Parameters
+
+- { __address__ }: Identifier of the remote device.
+- { __value__ }: String to send.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .write({
+    address: '00:11:22:33:44:55',
+    value: 'Hello world',
+  })
+  .then(() => {
+    console.log('Value sent to device');
+  })
+  .catch(() => {
+    console.log('Error writing data to device');
+  });
+```
