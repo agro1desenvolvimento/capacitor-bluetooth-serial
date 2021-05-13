@@ -1,14 +1,9 @@
-import { WebPlugin, registerWebPlugin } from '@capacitor/core';
+
+import { WebPlugin } from '@capacitor/core';
 import { BluetoothSerialPlugin } from './definitions';
 import { OptionsRequiredError } from './utils/errors';
 
 export class BluetoothSerialWeb extends WebPlugin implements BluetoothSerialPlugin {
-  constructor() {
-    super({
-      name: 'BluetoothSerial',
-      platforms: ['web'],
-    });
-  }
 
   async isEnabled(): Promise<import('./definitions').BluetoothEnabledResult> {
     throw new Error('Method not implemented.');
@@ -93,5 +88,3 @@ export class BluetoothSerialWeb extends WebPlugin implements BluetoothSerialPlug
 const BluetoothSerial = new BluetoothSerialWeb();
 
 export { BluetoothSerial };
-
-registerWebPlugin(BluetoothSerial);
