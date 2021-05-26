@@ -1,9 +1,3 @@
-declare module "@capacitor/core" {
-  interface PluginRegistry {
-    BluetoothSerial: BluetoothSerialPlugin;
-  }
-}
-
 export interface BluetoothSerialPlugin {
 
   isEnabled(): Promise<BluetoothEnabledResult>;
