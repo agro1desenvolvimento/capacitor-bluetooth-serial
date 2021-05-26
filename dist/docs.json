@@ -1,0 +1,466 @@
+{
+  "api": {
+    "name": "BluetoothSerialPlugin",
+    "slug": "bluetoothserialplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "isEnabled",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothEnabledResult"
+        ],
+        "slug": "isenabled"
+      },
+      {
+        "name": "enable",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothEnabledResult"
+        ],
+        "slug": "enable"
+      },
+      {
+        "name": "scan",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothScanResult"
+        ],
+        "slug": "scan"
+      },
+      {
+        "name": "connect",
+        "signature": "(options: BluetoothConnectOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothConnectOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothConnectOptions"
+        ],
+        "slug": "connect"
+      },
+      {
+        "name": "connectInsecure",
+        "signature": "(options: BluetoothConnectOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothConnectOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothConnectOptions"
+        ],
+        "slug": "connectinsecure"
+      },
+      {
+        "name": "disconnect",
+        "signature": "(options: BluetoothConnectOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothConnectOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothConnectOptions"
+        ],
+        "slug": "disconnect"
+      },
+      {
+        "name": "isConnected",
+        "signature": "(options: BluetoothConnectOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothConnectOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothConnectOptions",
+          "BluetoothConnectResult"
+        ],
+        "slug": "isconnected"
+      },
+      {
+        "name": "read",
+        "signature": "(options: BluetoothReadOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothReadOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothReadOptions",
+          "BluetoothDataResult"
+        ],
+        "slug": "read"
+      },
+      {
+        "name": "readUntil",
+        "signature": "(options: BluetoothReadUntilOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothReadUntilOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothReadUntilOptions",
+          "BluetoothDataResult"
+        ],
+        "slug": "readuntil"
+      },
+      {
+        "name": "write",
+        "signature": "(options: BluetoothWriteOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothWriteOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothWriteOptions"
+        ],
+        "slug": "write"
+      },
+      {
+        "name": "enableNotifications",
+        "signature": "(options: BluetoothEnableNotificationsOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothEnableNotificationsOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothEnableNotificationsOptions",
+          "BluetoothEnableNotificationsResult"
+        ],
+        "slug": "enablenotifications"
+      },
+      {
+        "name": "disableNotifications",
+        "signature": "(options: BluetoothDisableNotificationsOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "BluetoothDisableNotificationsOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "BluetoothDisableNotificationsOptions"
+        ],
+        "slug": "disablenotifications"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "BluetoothEnabledResult",
+      "slug": "bluetoothenabledresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "enabled",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothScanResult",
+      "slug": "bluetoothscanresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "devices",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "BluetoothDevice"
+          ],
+          "type": "{}"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothDevice",
+      "slug": "bluetoothdevice",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "name",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "class",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "uuid",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "rssi",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothConnectOptions",
+      "slug": "bluetoothconnectoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothConnectResult",
+      "slug": "bluetoothconnectresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "connected",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothReadOptions",
+      "slug": "bluetoothreadoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothDataResult",
+      "slug": "bluetoothdataresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "data",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothReadUntilOptions",
+      "slug": "bluetoothreaduntiloptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "delimiter",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothWriteOptions",
+      "slug": "bluetoothwriteoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothEnableNotificationsOptions",
+      "slug": "bluetoothenablenotificationsoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "delimiter",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothEnableNotificationsResult",
+      "slug": "bluetoothenablenotificationsresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "eventName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothDisableNotificationsOptions",
+      "slug": "bluetoothdisablenotificationsoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "enums": []
+}
